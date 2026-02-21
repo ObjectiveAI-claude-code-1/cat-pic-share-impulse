@@ -1,0 +1,111 @@
+{
+  "type": "vector.function",
+  "output_length": {
+    "$starlark": "len(input)"
+  },
+  "input_split": {
+    "$starlark": "[[item] for item in input]"
+  },
+  "input_merge": {
+    "$starlark": "[item for sublist in input for item in sublist]"
+  },
+  "input_schema": {
+    "type": "array",
+    "description": "An array of cat pictures to rank by the strength of the share impulse they provoke.",
+    "minItems": 2,
+    "items": {
+      "type": "image",
+      "description": "A cat picture to evaluate for share impulse."
+    }
+  },
+  "tasks": [
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Show me the cat picture that would stop someone mid-scroll. I want the one that hits like a reflex — the kind where you laugh or gasp before you even know why."
+            }
+          ]
+        }
+      ],
+      "responses": {
+        "$starlark": "[[item] for item in input]"
+      },
+      "output": {
+        "$jmespath": "output.scores"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "system",
+          "content": [
+            {
+              "type": "text",
+              "text": "You are choosing a single cat picture to send in a message with absolutely no accompanying text, caption, or context. The recipient has no idea it is coming. The image must land entirely on its own — universally legible, instantly comprehensible, a complete moment that needs no explanation."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Pick a cat picture I can send to someone with no words attached. Just the image, nothing else. It has to work completely on its own."
+            }
+          ]
+        }
+      ],
+      "responses": {
+        "$starlark": "[[item] for item in input]"
+      },
+      "output": {
+        "$jmespath": "output.scores"
+      }
+    },
+    {
+      "type": "vector.completion",
+      "messages": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "I’m building a permanent collection of cat pictures — the kind I’ll come back to again and again. I only want images that get better with time, not worse. Show me a cat picture worth saving forever."
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "So you want something with real staying power — an image that won’t feel used up after one viewing. Something inexhaustible. Let me find the right one."
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "Exactly. The kind of cat picture you’d still be glad to have in your camera roll a year from now. The kind that’s just as good the twentieth time you see it."
+            }
+          ]
+        }
+      ],
+      "responses": {
+        "$starlark": "[[item] for item in input]"
+      },
+      "output": {
+        "$jmespath": "output.scores"
+      }
+    }
+  ],
+  "description": "Ranks cat pictures by the impulse they provoke to share or save. Evaluates emotional immediacy (how fast and hard it hits), self-sufficiency (whether it lands with no caption or context), and staying power (whether it remains compelling on repeated viewing). Top-ranked images demand to be forwarded; lowest are smiled at and forgotten."
+}
